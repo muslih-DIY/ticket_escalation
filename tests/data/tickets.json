@@ -1,0 +1,19 @@
+{
+   "OPEN_TICKET":{
+   "ticket_id":"T1234",
+   "customer_id":"C123",
+   "product_id":"P123",
+   "complaint_type":"Service",    
+   "booked_on":"",
+   "re_opened_on":"",
+   "last_update":"",
+   "closed_on":"",
+   "resolved_on":"",    
+   "priority":"1",
+   "remote_support_count":"0",
+   "onsite_support_count":"0",
+   "status":"OPEN"
+   }
+    
+}
+
