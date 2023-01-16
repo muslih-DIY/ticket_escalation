@@ -12,7 +12,8 @@
    "priority":"1",
    "remote_support_count":"0",
    "onsite_support_count":"0",
-   "status":"OPEN"
+   "current_status":"OPEN",
+   "service_level_name":""
    }
     
 }
