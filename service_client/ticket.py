@@ -10,16 +10,17 @@ class TicketStatus(Enum):
     OPEN = auto()           # ticket not assigned any service level
     ASSIGNED = auto()       # ticket assigned a service level
     CLOSED = auto()         # ticket closed
-    RESOLVED = auto()       # issue resolved 
-    INPROGRESS = auto()
+    RESOLVED = auto()       # issue resolved
+    INPROGRESS = auto()     # SL and SE Assigned Work in progress
+
 
 
 class ServiceStatus(Enum):
     "different possible status of service _level"
-    UNASSIGNED = auto()
+    SE_NOT_ASSIGNED = auto()     # SE not assigned
+    SE_ASSIGNED = auto()         # SE assigned
     COMPLETED = auto()
     ACCEPTED = auto()
-    ASSIGNED = auto()
     INPROGRESS = auto()
 
 
@@ -61,6 +62,8 @@ class Ticket():
         "update the service_level"
         self._service_level = service_level
         self._service_level.ticket = self
+        self._status = TicketStatus.ASSIGNED
+        self._service_level.status = ServiceStatus.UNASSIGNED
 
     @property
     def status(self):
@@ -104,9 +107,9 @@ class ServiceLevelIF(ABC):
 
     __SERVICE_CLASS= {}
 
-    _engineer_id:str
-    _status:ServiceStatus
-    _ticket:Ticket
+    _SE:'ServiceEngineer' = None
+    _status:ServiceStatus = None
+    _ticket:Ticket  = None
 
     @property
     def status(self):
@@ -127,6 +130,11 @@ class ServiceLevelIF(ABC):
     def ticket(self,ticket:Ticket):
         "set the protected ticket attribute"
         self._ticket = ticket
+
+    @property
+    def service_engineer(self):
+        return self._SE
+    
 
     @staticmethod
     def service_register(klass):
@@ -176,8 +184,14 @@ class ServiceLevelIF(ABC):
     def get_engineer(self):
         "This will return an engineer from the service level"
 
-    @abstractmethod
-    def assign_engineer(self,engineer_id:str=None):
+
+    def assign_engineer(self,se:'ServiceEngineer'= None):
         "This will update the engineer in the service level"
+        if not se or not isinstance(se,ServiceEngineer):
+            se = self.get_engineer()
+            
+        self._SE = se
 
-
+@dataclass
+class ServiceEngineer:
+    id:str

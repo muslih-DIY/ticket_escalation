@@ -1,7 +1,7 @@
 import logging
 import json
 import os
-from service_module.ticket import Ticket,TICKET_STATUS
+from service_client.ticket import Ticket,TICKET_STATUS
 
 TEST_DATA_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)),'test','data')
 

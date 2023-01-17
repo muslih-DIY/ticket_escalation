@@ -1,9 +1,7 @@
 from abc import abstractmethod
 from enum import Enum,auto
 from typing import Optional,Dict
-from .ticket import ServiceLevelIF
-
-
+from .ticket import ServiceLevelIF,ServiceEngineer
 
 class OnlineServiceIF(ServiceLevelIF):
     "Online support abstract"
@@ -36,8 +34,8 @@ class Onlinel0(OnlineServiceIF):
     def get_engineer(self):
         "return an engineer id"
 
-    def assign_engineer(self, engineer_id: str = None):
-        self._engineer_id = engineer_id
+    def assign_engineer(self,se:ServiceEngineer):
+        
 
 @ServiceLevelIF.service_register
 class Onlinel1(OnlineServiceIF):
@@ -56,6 +54,6 @@ class Onlinel1(OnlineServiceIF):
     def get_engineer(self):
         "return an engineer id"
 
-    def assign_engineer(self, engineer_id: str = None):
-        self._engineer_id = engineer_id
+    def assign_engineer(self,se:ServiceEngineer):
+        self._SE = se
         

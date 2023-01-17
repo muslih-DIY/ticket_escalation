@@ -1,11 +1,9 @@
 import pytest
 import json
-import pathlib
 import os
 
 TEST_DATA_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
 
-    
 
 def get_test_data(filename)->dict:
     filepath = os.path.join(TEST_DATA_FOLDER,filename)
@@ -15,6 +13,6 @@ def get_test_data(filename)->dict:
     return data
 
 @pytest.fixture    
-def get_ticket()->dict:
+def get_tickets()->dict:
     data:dict = get_test_data('tickets.json')
     return data
