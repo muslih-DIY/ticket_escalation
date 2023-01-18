@@ -1,4 +1,4 @@
-from typing import Optional,Dict
+from typing import Dict
 from abc import ABC,abstractmethod
 from datetime import datetime
 from enum import Enum,auto
@@ -24,18 +24,23 @@ class ServiceStatus(Enum):
     INPROGRESS = auto()
 
 
+class ServiceLevelError(Exception):
+    "Raise any service level exception"
+
+
+
 @dataclass
 class Ticket():
     "This class deal the ticket escalation"
-    ticket_id:str 
+    ticket_id:str
     customer_id:str
     product_id:str
-    complaint_type:str    
+    complaint_type:str   
     booked_on:datetime
     re_opened_on:datetime
     last_update:datetime
     closed_on:datetime
-    resolved_on:datetime    
+    resolved_on:datetime
     priority:int
     remote_support_count:int
     onsite_support_count:int
@@ -49,7 +54,7 @@ class Ticket():
             service_level = ServiceLevelIF.get_service_class(self.service_level_name)
             self._service_level = service_level()
         except ValueError:
-            self._service_level= None            
+            self._service_level= None         
         self._status = TicketStatus[self.current_status.upper()]
 
     @property
@@ -63,7 +68,7 @@ class Ticket():
         self._service_level = service_level
         self._service_level.ticket = self
         self._status = TicketStatus.ASSIGNED
-        self._service_level.status = ServiceStatus.UNASSIGNED
+        self._service_level.status = ServiceStatus.SE_NOT_ASSIGNED
 
     @property
     def status(self):
@@ -86,6 +91,8 @@ class Ticket():
 
     def escalate(self):
         "escalate"
+        if not self._service_level:
+            raise ServiceLevelError('Cannot escalate ticket have no service level assigned(OPEN ticket)')
         self._service_level.escalate()
 
     def complete(self):
@@ -99,7 +106,6 @@ class Ticket():
     def reject(self):
         "Reject the ticket from the service level by engineer"
         self.service_level.reject()
-
 
 
 class ServiceLevelIF(ABC):
@@ -183,14 +189,15 @@ class ServiceLevelIF(ABC):
     @abstractmethod
     def get_engineer(self):
         "This will return an engineer from the service level"
+        return ServiceEngineer('SE1')
 
 
-    def assign_engineer(self,se:'ServiceEngineer'= None):
+    def assign_engineer(self,s_e:'ServiceEngineer'= None):
         "This will update the engineer in the service level"
-        if not se or not isinstance(se,ServiceEngineer):
-            se = self.get_engineer()
-            
-        self._SE = se
+        if not s_e or not isinstance(s_e,ServiceEngineer):
+            s_e = self.get_engineer()
+        self._SE = s_e
+        self._status = ServiceStatus.SE_ASSIGNED
 
 @dataclass
 class ServiceEngineer:

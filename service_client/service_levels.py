@@ -34,7 +34,8 @@ class Onlinel0(OnlineServiceIF):
     def get_engineer(self):
         "return an engineer id"
 
-    def assign_engineer(self,se:ServiceEngineer):
+    # def assign_engineer(self,se:ServiceEngineer):
+    #     "assign"
         
 
 @ServiceLevelIF.service_register
@@ -54,6 +55,6 @@ class Onlinel1(OnlineServiceIF):
     def get_engineer(self):
         "return an engineer id"
 
-    def assign_engineer(self,se:ServiceEngineer):
-        self._SE = se
+    # def assign_engineer(self,se:ServiceEngineer):
+    #     self._SE = se
         
