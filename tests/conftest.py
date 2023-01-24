@@ -16,3 +16,8 @@ def get_test_data(filename)->dict:
 def get_tickets()->dict:
     data:dict = get_test_data('tickets.json')
     return data
+
+@pytest.fixture    
+def get_service_level()->dict:
+    data:dict = get_test_data('service_levels.json')
+    return data

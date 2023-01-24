@@ -10,11 +10,30 @@
    "closed_on":"",
    "resolved_on":"",    
    "priority":"1",
-   "remote_support_count":"0",
-   "onsite_support_count":"0",
-   "current_status":"OPEN",
-   "service_level_name":""
-   }
+   "care_pack_id":"CARE-123",
+   "ticket_status":"OPEN",
+   "service_level_name":"",
+   "description":"boot level issue",
+   "service_level_id":"SL123"
+   },
+
+   "LO_ONLINE":{
+      "ticket_id":"T1235",
+      "customer_id":"C1235",
+      "product_id":"P1235",
+      "complaint_type":"Service",    
+      "booked_on":"",
+      "re_opened_on":"",
+      "last_update":"",
+      "closed_on":"",
+      "resolved_on":"",    
+      "priority":"1",
+      "ticket_status":"ASSIGNED",
+      "service_level_name":"L0online",
+      "care_pack_id":"CARE-123",
+      "description":"boot level issue",
+      "service_level_id":"SL234"
+      }
     
 }
 
