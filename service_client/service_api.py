@@ -14,7 +14,7 @@ import requests
 from .service_levels import ServiceLevelIF
 
 def get_ticket_details(ticket_id:str)-> dict:
-    "get information of ticket from service server"
+    "get information of ticket from service server api"
     return {}
 
 
@@ -26,10 +26,9 @@ def get_ticket(ticket_id:str):
 
 
 
-def get_active_service_level(ticket_id):
-    pass
 
-def get_service_details():
+
+def get_service_details(ticket_id):
     return {
         'service_name':"L0Online",
         "id":"SL123",
@@ -42,10 +41,9 @@ def get_service_details():
         "se_allocated":'SA3213'
     }
 
-def get_active_service_level(ticket_id)-> ServiceLevelIF:
+def get_active_service_level(service_id:str)-> ServiceLevelIF:
     "Return the active service_status_of the ticket"
-    service_level_details = get_service_details()
-    service_name = service_level_details.pop('service_name','')
-    print(service_level_details)
+    service_level_details = get_service_details(service_id)
+    service_name = service_level_details.pop('service_level_name')
     return ServiceLevelIF.get_service_class(service_name)(**service_level_details)
     

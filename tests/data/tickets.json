@@ -12,9 +12,8 @@
    "priority":"1",
    "care_pack_id":"CARE-123",
    "ticket_status":"OPEN",
-   "service_level_name":"",
    "description":"boot level issue",
-   "service_level_id":"SL123"
+   "service_level_id":""
    },
 
    "LO_ONLINE":{
@@ -29,7 +28,6 @@
       "resolved_on":"",    
       "priority":"1",
       "ticket_status":"ASSIGNED",
-      "service_level_name":"L0online",
       "care_pack_id":"CARE-123",
       "description":"boot level issue",
       "service_level_id":"SL234"

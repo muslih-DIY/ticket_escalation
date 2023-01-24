@@ -1,0 +1,15 @@
+{
+    "SL234":{
+    "id":"SL234",
+    "ticket_id":"T1234",
+    "service_level_name":"L0online",
+    "started_on":"2018-08-03T10:51:42.990239",
+    "updated_on":"2018-08-03T10:51:42.990239",
+    "complete_on":"2018-08-03T10:51:42.990239",
+    "service_level_status":"SE_not_assigned",
+    "se_allocation_id":"",
+    "se_allocated":""
+    }
+
+
+}

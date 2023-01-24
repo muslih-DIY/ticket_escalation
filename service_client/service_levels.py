@@ -18,13 +18,26 @@ class ServiceLevelIF(ABC):
     updated_on:datetime
     complete_on:datetime
     service_level_status:str
-    se_allocation_id:str
-    se_allocated:str
+    se_allocation_id:str 
+    se_allocated:str 
 
     _service_engineer:ServiceEngineerAllocation = field(init=False,default=None)
     _status:ServiceStatus = field(init=False,default=None)
     __BASE_SERVICE:'ServiceLevelIF' = field(init=False)
     
+    def __post_init__(self):
+        self._status = ServiceStatus[self.service_level_status.upper()]
+
+    @property
+    @abstractmethod
+    def next_service(self):
+        "next escalation level"
+
+    @property
+    @abstractmethod
+    def previous_service(self):
+        "last service level"
+
     @property
     def status(self):
         "get status"
@@ -35,6 +48,24 @@ class ServiceLevelIF(ABC):
         "set status"
         self._status = status
 
+    @classmethod
+    def get_id(cls):
+        import time
+        return f"SL{time.time()}"[:8]
+
+
+    @classmethod
+    def get_a_new_service_level(cls,serivce_name,ticket_id) -> 'ServiceLevelIF':
+        return cls.get_service_class(serivce_name)(
+            id = cls.get_id(),
+            ticket_id=ticket_id,
+            started_on = datetime.now(),
+            updated_on = datetime.now(),
+            complete_on = None,
+            service_level_status = ServiceStatus.SE_NOT_ASSIGNED.name,
+            se_allocation_id = "",
+            se_allocated = ""
+        )
 
     @property
     def service_engineer(self):
@@ -95,9 +126,17 @@ class ServiceLevelIF(ABC):
     def service_sub_type(self):
         "sub type like LO L1"
 
-    @abstractmethod
+    @property
+    def service_level_name(self):
+        "return the service name"
+        return f'{self.service_sub_type()}{self.service_type()}'
+
+
     def escalate(self):
         "The escalation of a ticket from it current level"
+        next_service = ServiceLevelIF.get_a_new_service_level(self.next_service,self.ticket_id)
+        
+        return  next_service  
 
     @abstractmethod
     def complete(self):
@@ -134,17 +173,16 @@ class L0Online(OnlineServiceIF):
     @property
     def service_sub_type(self):
         return 'L0'
+    @property
+    def next_service(self):
+        "next escalation level"
+        return 'L1online'
+        
+    @property
+    def previous_service(self):
+        "last service level"
+        return None
 
-    def escalate(self):
-        next_service:'L1Online' = ServiceLevelIF.get_service_class('L1Online')
-        return next_service(
-                    started_on=datetime.now(),
-                    updated_on=datetime.now(),
-                    complete_on = None,
-                    service_level_status='SE_NOT_ASSIGNED',
-                    se_allocation_id = None,
-                    se_allocated = None
-        )
 
     def complete(self):
         "completed the issue"
@@ -157,13 +195,11 @@ class L0Online(OnlineServiceIF):
 @dataclass
 class L1Online(OnlineServiceIF):
     "L1 online support "
+    
     @property
     def service_sub_type(self):
         return 'L1'
 
-    def escalate(self):
-        next_service = ServiceLevelIF.get_service_class('L2Online')
-        return next_service()
 
     def complete(self):
         "completed the issue"
@@ -171,3 +207,12 @@ class L1Online(OnlineServiceIF):
     def get_engineer(self):
         "return an engineer id"
 
+    @property
+    def next_service(self):
+        "next escalation level"
+        return 'L2online'
+        
+    @property
+    def previous_service(self):
+        "last service level"
+        return 'L0online'

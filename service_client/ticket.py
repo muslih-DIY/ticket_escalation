@@ -24,7 +24,6 @@ class Ticket():
     priority:int
     ticket_status:str
     service_level_id:int
-    service_level_name:str
     description:str
     care_pack_id:str
 
@@ -36,10 +35,11 @@ class Ticket():
     def __post_init__(self):
         self._status = TicketStatus[self.ticket_status.upper()]
         self._care_pack = get_care_pack(self.care_pack_id)
-        self._service_level= get_active_service_level(self.ticket_id)
+        self._service_level = None
+        if not self._status == TicketStatus.OPEN:
+            self._service_level= get_active_service_level(self.service_level_id)
 
 
-            
 
     @property
     def service_level(self):
